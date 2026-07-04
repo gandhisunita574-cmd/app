@@ -1,0 +1,120 @@
+{
+  "theme": "Light",
+  "archetype": "5 (Luxury) - Modified with White, Black, Gold",
+  "brand": {
+    "name": "HamperStore",
+    "vibe": "Premium, Elegant, Luxury, Minimalistic, Modern",
+    "tone": "Sophisticated, intentional, and trustworthy."
+  },
+  "colors": {
+    "base": {
+      "primary": "#FFFFFF",
+      "secondary": "#FAFAFA",
+      "tertiary": "#F3F4F6"
+    },
+    "text": {
+      "primary": "#0A0A0A",
+      "secondary": "#4A4A4A",
+      "light": "#FFFFFF"
+    },
+    "accents": {
+      "gold_primary": "#D4AF37",
+      "gold_muted": "#B59530",
+      "black_pure": "#000000",
+      "black_soft": "#1A1A1A"
+    },
+    "states": {
+      "hover": "#C5A059",
+      "error": "#8B0000",
+      "success": "#2E8B57"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Cormorant Garamond, serif",
+      "body": "Outfit, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "scales": {
+      "h1": "text-5xl md:text-6xl tracking-tight leading-none",
+      "h2": "text-4xl md:text-5xl tracking-tight leading-tight",
+      "h3": "text-2xl md:text-3xl leading-snug",
+      "h4": "text-xl font-medium",
+      "body": "text-base leading-relaxed",
+      "small": "text-sm tracking-wide",
+      "overline": "text-xs uppercase tracking-[0.2em] font-medium"
+    }
+  },
+  "layout": {
+    "spacing": {
+      "section_y": "py-20 md:py-32",
+      "container_px": "px-6 md:px-12",
+      "gap_default": "gap-8 md:gap-12",
+      "gap_large": "gap-16 md:gap-24"
+    },
+    "grid": {
+      "bento": "grid grid-cols-1 md:grid-cols-12 gap-8",
+      "products": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6",
+      "admin": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    },
+    "surfaces": {
+      "header": "backdrop-blur-xl bg-white/80 border-b border-black/5 z-50 sticky top-0",
+      "card": "bg-white border border-black/5 hover:shadow-xl transition-shadow duration-300",
+      "admin_card": "bg-white border border-black/10 rounded-lg p-6 shadow-sm",
+      "footer": "bg-black text-white py-24"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-black text-white px-8 py-4 rounded-none hover:bg-black/90 hover:text-[#D4AF37] transition-all font-medium flex items-center justify-center",
+      "secondary": "bg-transparent border border-black text-black px-8 py-4 rounded-none hover:bg-black hover:text-white transition-all font-medium",
+      "gold": "bg-[#D4AF37] text-white px-8 py-4 rounded-none hover:bg-[#B59530] transition-all font-medium"
+    },
+    "inputs": {
+      "default": "border-b border-black/20 bg-transparent py-3 px-0 focus:outline-none focus:border-black transition-colors rounded-none placeholder:text-black/40",
+      "admin": "border border-black/20 rounded-md py-2 px-3 focus:ring-1 focus:ring-black focus:border-black"
+    },
+    "product_card": {
+      "wrapper": "group cursor-pointer relative",
+      "image_container": "overflow-hidden bg-[#FAFAFA] aspect-[4/5] relative",
+      "image": "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105",
+      "info": "mt-4 flex flex-col items-center text-center",
+      "title": "font-heading text-xl text-black",
+      "price": "text-black/60 mt-1"
+    }
+  },
+  "motion": {
+    "scroll": "Use Lenis for smooth scrolling.",
+    "page_transitions": "Fade-in with Framer Motion (initial opacity 0, y 20).",
+    "hover": "Image scale up (105%) on hover, button background/text color transitions.",
+    "stagger": "Stagger children elements (like product grids) by 0.1s on scroll reveal."
+  },
+  "media": {
+    "hero_hamper": {
+      "url": "https://images.pexels.com/photos/20699855/pexels-photo-20699855.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Luxurious gift basket with chocolates and sweets, used for main hero background."
+    },
+    "hero_bouquet": {
+      "url": "https://images.unsplash.com/photo-1782038522691-7faf943aa95e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODF8MHwxfHNlYXJjaHwxfHxwcmVtaXVtJTIwZmxvd2VyJTIwYm91cXVldHxlbnwwfHx8fDE3ODMxNDE2MzZ8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Premium white and pink peonies in a glass vase, used for floral sections."
+    },
+    "category_gift_boxes": {
+      "url": "https://images.unsplash.com/photo-1674620213535-9b2a2553ef40?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzOTB8MHwxfHNlYXJjaHwzfHxnaWZ0JTIwYm94JTIwcmliYm9ufGVufDB8fHx8MTc4MzE0MTYzN3ww&ixlib=rb-4.1.0&q=85",
+      "description": "Two black and white boxes with gold bows, used for featured hampers category tile."
+    },
+    "about_florist": {
+      "url": "https://images.unsplash.com/photo-1710629357740-546115c6f75b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwyfHxmbG9yaXN0JTIwZWxlZ2FudHxlbnwwfHx8fDE3ODMxNDE2Mzd8MA&ixlib=rb-4.1.0&q=85",
+      "description": "A vase filled with elegant flowers, used for the About Us or Why Us section."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Install required dependencies: framer-motion, @phosphor-icons/react, lenis, @radix-ui/react-icons, clsx, tailwind-merge.",
+    "Use Shadcn UI for dropdowns, forms, dialogs, and sheets (for cart drawer). Customize the Shadcn components to remove the 'default Vercel look'—make borders 1px solid black/10, remove border-radius (rounded-none for premium feel), and use pure black/white/gold.",
+    "Implement 'data-testid' on all interactive elements (buttons, links, inputs).",
+    "Header must be sticky with a backdrop-blur-xl.",
+    "Typography: Import 'Cormorant Garamond' and 'Outfit' from Google Fonts in index.css. Use them via Tailwind configured font families.",
+    "Layout: Use liberal padding (p-12 to p-24) to create a high-end editorial feel.",
+    "Ensure high contrast: text must be easily readable.",
+    "Admin Dashboard should use a denser 'Control Room' grid layout and standard Shadcn components for utility."
+  ]
+}
