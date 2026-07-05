@@ -1,0 +1,50 @@
+{
+  "summary": "E2E tested HamperStore across storefront, checkout, custom orders, admin dashboard. Core flows work: register/login, PDP pincode check, add-to-cart, checkout with coupon WELCOME10, mock payment, order success (Order HS1783249215 confirmed with total ₹3599 after 10% discount), custom order submission (custom-order-success visible), newsletter subscribe, admin login redirect to /admin, dashboard stats (stat-revenue), create new product (visible in list), create new coupon (TEST9202 visible in list).",
+  "tested_scope": ["frontend", "backend", "auth", "integration"],
+  "passed": [
+    "Backend /api/products returns 200 with data",
+    "Backend /api/auth/login admin returns token + role admin",
+    "Backend POST /api/pincode/check for 400001 returns deliverable=true",
+    "PDP add-to-cart-btn works, cart drawer auto-opens",
+    "checkout-btn navigates to /checkout (protected route works with token)",
+    "Checkout: address form fill, WELCOME10 coupon apply (discount reflected), pm-mock selection, ck-place-order → order-success page shows order number and total",
+    "Custom order form (/custom-order) submits and shows custom-order-success screen",
+    "Newsletter subscribe submits successfully",
+    "Admin login redirects to /admin, dashboard shows stat-revenue tile",
+    "Admin -> New Product form fills and saves; product appears in list",
+    "Admin -> Coupons: cp-code + cp-create adds coupon (TEST9202 visible)",
+    "Pincode-check-btn on PDP shows Delivery available message"
+  ],
+  "failed": [
+    {
+      "area": "Contact form",
+      "issue": "data-testid='contact-email' is applied to TWO elements (outer wrapper div + inner input), causing Playwright to resolve to the div and Playwright fill() throws 'Element is not an input'. Same pattern likely for contact-name/subject/message.",
+      "evidence": "Playwright: 'locator resolved to 2 elements. Proceeding with the first one: <div ... data-testid=\"contact-email\">'",
+      "priority": "MEDIUM"
+    },
+    {
+      "area": "SEO / Branding",
+      "issue": "HTML <title> tag still shows 'Emergent | Fullstack App' instead of 'HamperStore'. The main agent claimed this was fixed but page.title() confirms it is not.",
+      "evidence": "Title: 'Emergent | Fullstack App' on / page load",
+      "priority": "LOW"
+    },
+    {
+      "area": "React hydration warning",
+      "issue": "Console warning: '<span> cannot be a child of <option>' — likely inside a Select component, non-blocking but pollutes console.",
+      "evidence": "CONSOLE[error]: In HTML, %s cannot be a child of <%s>",
+      "priority": "LOW"
+    }
+  ],
+  "not_tested": [
+    "Admin custom-request quote flow (quote-btn-{id}, quote-price, quote-eta, quote-send)",
+    "Customer accept-quote flow (co-accept-{id}) → status becomes 'paid'"
+  ],
+  "action_items": [
+    "Remove duplicate data-testid='contact-email' (and siblings) from the wrapper div in Contact.jsx — keep it only on the actual <input>/<textarea>.",
+    "Update /app/frontend/public/index.html <title> to 'HamperStore' (still shows the Emergent default).",
+    "Fix the <span> inside <option> in a Select to avoid hydration warning."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "91% (10/11 flows attempted passed; contact form blocked by duplicate testid)"},
+  "retest_needed": true,
+  "full_testing_deferred": true
+}
