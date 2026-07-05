@@ -471,9 +471,11 @@ async def get_reviews(pid: str):
 # ---------- Coupons ----------
 @api.get("/coupons/{code}")
 async def validate_coupon(code: str):
-    c = await db.coupons.find_one({"code": code.upper(), "active": True})
+    c = await db.coupons.find_one({"code": code.upper()})
     if not c:
-        raise HTTPException(404, "Invalid coupon")
+        raise HTTPException(404, "Invalid coupon code")
+    if not c.get("active"):
+        raise HTTPException(400, "This coupon is inactive")
     return _clean(c)
 
 @api.get("/admin/coupons")
@@ -489,6 +491,14 @@ async def create_coupon(data: CouponIn, admin: dict = Depends(require_admin)):
     doc["created_at"] = now_utc()
     await db.coupons.insert_one(doc)
     return _clean(doc)
+
+@api.put("/admin/coupons/{cid}/toggle")
+async def toggle_coupon(cid: str, admin: dict = Depends(require_admin)):
+    c = await db.coupons.find_one({"id": cid})
+    if not c:
+        raise HTTPException(404, "Not found")
+    await db.coupons.update_one({"id": cid}, {"$set": {"active": not c.get("active", True)}})
+    return {"ok": True, "active": not c.get("active", True)}
 
 @api.delete("/admin/coupons/{cid}")
 async def delete_coupon(cid: str, admin: dict = Depends(require_admin)):

@@ -79,11 +79,26 @@ function Overview() {
 const EMPTY_P = { name: "", category: "hamper", occasion: [], price: 0, discount_price: null, images: [""],
   description: "", stock: 100, tags: [], featured: false, best_seller: false, new_arrival: false };
 
+const SECTIONS = [
+  { key: "all", label: "All products", match: () => true, preset: {} },
+  { key: "hamper", label: "Hampers", match: (p) => p.category === "hamper", preset: { category: "hamper" } },
+  { key: "bouquet", label: "Bouquets", match: (p) => p.category === "bouquet", preset: { category: "bouquet" } },
+  { key: "featured", label: "Featured (Favourites)", match: (p) => p.featured, preset: { featured: true } },
+  { key: "best_seller", label: "Best Sellers", match: (p) => p.best_seller, preset: { best_seller: true } },
+  { key: "new_arrival", label: "New Arrivals", match: (p) => p.new_arrival, preset: { new_arrival: true } },
+];
+
 function ProductsAdmin() {
   const [list, setList] = useState([]);
   const [editing, setEditing] = useState(null);
+  const [section, setSection] = useState("all");
   const load = () => api.get("/products?limit=500").then((r) => setList(r.data));
   useEffect(() => { load(); }, []);
+
+  const current = SECTIONS.find((s) => s.key === section);
+  const filtered = list.filter(current.match);
+
+  const openNew = () => setEditing({ ...EMPTY_P, ...current.preset });
 
   const save = async () => {
     try {
@@ -106,22 +121,58 @@ function ProductsAdmin() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <h1 className="font-heading text-4xl">Products</h1>
-        <button onClick={() => setEditing({ ...EMPTY_P })} data-testid="admin-new-product" className="btn-primary">+ New</button>
+        <button onClick={openNew} data-testid="admin-new-product" className="btn-primary">
+          + New in {current.label}
+        </button>
       </div>
+
+      <div className="flex flex-wrap gap-2 mb-8 border-b pb-2">
+        {SECTIONS.map((s) => {
+          const count = list.filter(s.match).length;
+          return (
+            <button
+              key={s.key}
+              onClick={() => setSection(s.key)}
+              data-testid={`section-${s.key}`}
+              className={`px-4 py-2 text-sm transition-colors ${
+                section === s.key
+                  ? "bg-black text-white"
+                  : "bg-transparent text-ink-muted hover:text-black"
+              }`}
+            >
+              {s.label} <span className="opacity-60 ml-1">({count})</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="text-center py-16 text-ink-muted border">
+          No products in <b>{current.label}</b> yet. Click "+ New in {current.label}" to add one.
+        </div>
+      ) : (
       <table className="w-full text-sm">
         <thead className="border-b"><tr className="text-left">
-          <th className="py-3">Name</th><th>Category</th><th>Price</th><th>Stock</th><th></th>
+          <th className="py-3"></th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Tags</th><th></th>
         </tr></thead>
         <tbody>
-          {list.map(p => (
+          {filtered.map(p => (
             <tr key={p.id} className="border-b" data-testid={`prow-${p.id}`}>
-              <td className="py-3">{p.name}</td>
-              <td>{p.category}</td>
+              <td className="py-3 w-16">
+                {p.images?.[0] && <img src={p.images[0]} alt="" className="w-12 h-12 object-cover"/>}
+              </td>
+              <td>{p.name}</td>
+              <td className="capitalize">{p.category}</td>
               <td>₹{p.discount_price || p.price}</td>
               <td>{p.stock}</td>
-              <td className="text-right">
+              <td className="text-xs">
+                {p.featured && <span className="mr-1 px-1 bg-[#F5E9C8] text-[#8B6F00]">Featured</span>}
+                {p.best_seller && <span className="mr-1 px-1 bg-black text-white">Best</span>}
+                {p.new_arrival && <span className="mr-1 px-1 border">New</span>}
+              </td>
+              <td className="text-right whitespace-nowrap">
                 <button onClick={() => setEditing({ ...p, occasion: (p.occasion||[]).join(", "), tags: (p.tags||[]).join(", ") })} className="link-gold mr-4">Edit</button>
                 <button onClick={() => del(p.id)} className="text-red-700">Delete</button>
               </td>
@@ -129,6 +180,7 @@ function ProductsAdmin() {
           ))}
         </tbody>
       </table>
+      )}
 
       {editing && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50" onClick={() => setEditing(null)}>
@@ -171,30 +223,116 @@ function ProductsAdmin() {
 
 function OrdersAdmin() {
   const [orders, setOrders] = useState([]);
+  const [viewing, setViewing] = useState(null);
   const load = () => api.get("/admin/orders").then((r) => setOrders(r.data));
   useEffect(() => { load(); }, []);
   const change = async (id, s) => { await api.put(`/admin/orders/${id}/status?status=${s}`); load(); toast.success("Updated"); };
   return (
     <div>
       <h1 className="font-heading text-4xl mb-8">Orders</h1>
+      {orders.length === 0 && <div className="text-center py-16 text-ink-muted border">No orders yet.</div>}
+      {orders.length > 0 && (
       <table className="w-full text-sm">
-        <thead className="border-b"><tr className="text-left"><th className="py-3">Order</th><th>Customer</th><th>Total</th><th>Status</th><th></th></tr></thead>
+        <thead className="border-b"><tr className="text-left"><th className="py-3">Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr></thead>
         <tbody>
           {orders.map(o => (
             <tr key={o.id} className="border-b">
               <td className="py-3 font-medium">{o.order_no}</td>
               <td>{o.user_email}</td>
+              <td>{o.items?.length || 0}</td>
               <td>₹{o.total.toFixed(0)}</td>
               <td>
                 <select value={o.status} onChange={(e)=>change(o.id, e.target.value)} className="border p-1 text-sm" data-testid={`ostatus-${o.id}`}>
                   {["confirmed","processing","shipped","delivered","cancelled"].map(s=><option key={s}>{s}</option>)}
                 </select>
               </td>
-              <td className="text-right text-xs text-ink-muted">{new Date(o.created_at).toLocaleDateString()}</td>
+              <td className="text-xs text-ink-muted">{new Date(o.created_at).toLocaleDateString()}</td>
+              <td className="text-right">
+                <button onClick={()=>setViewing(o)} data-testid={`oview-${o.id}`} className="link-gold">View details</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      )}
+
+      {viewing && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6" onClick={()=>setViewing(null)}>
+          <div className="bg-white p-8 max-w-2xl w-full max-h-[90vh] overflow-auto" onClick={(e)=>e.stopPropagation()} data-testid="order-detail-modal">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <div className="overline">Order</div>
+                <h2 className="font-heading text-3xl">{viewing.order_no}</h2>
+                <div className="text-xs text-ink-muted mt-1">Placed on {new Date(viewing.created_at).toLocaleString()}</div>
+              </div>
+              <div className="text-right">
+                <div className="overline">Status</div>
+                <div className="font-heading text-xl text-[#D4AF37] uppercase">{viewing.status}</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6 mb-6">
+              <div>
+                <div className="overline mb-2">Customer</div>
+                <div>{viewing.address?.full_name}</div>
+                <div className="text-sm text-ink-muted">{viewing.user_email}</div>
+                <div className="text-sm text-ink-muted">📞 {viewing.address?.phone}</div>
+              </div>
+              <div>
+                <div className="overline mb-2">Delivery address</div>
+                <div className="text-sm">{viewing.address?.line1}</div>
+                {viewing.address?.line2 && <div className="text-sm">{viewing.address.line2}</div>}
+                <div className="text-sm">{viewing.address?.city}, {viewing.address?.state} — {viewing.address?.pincode}</div>
+                <div className="text-sm">{viewing.address?.country}</div>
+              </div>
+            </div>
+
+            {viewing.delivery_instructions && (
+              <div className="mb-6 bg-[#FAFAFA] p-4">
+                <div className="overline mb-1">Delivery instructions</div>
+                <div className="text-sm">{viewing.delivery_instructions}</div>
+              </div>
+            )}
+
+            <div className="mb-6">
+              <div className="overline mb-3">Items</div>
+              {viewing.items?.map((it, i) => (
+                <div key={i} className="flex gap-4 py-3 border-b">
+                  {it.image && <img src={it.image} alt={it.name} className="w-16 h-20 object-cover" />}
+                  <div className="flex-1">
+                    <div className="font-medium">{it.name}</div>
+                    <div className="text-sm text-ink-muted">Qty: {it.quantity} · ₹{it.price} each</div>
+                  </div>
+                  <div className="font-medium">₹{(it.price * it.quantity).toFixed(0)}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-1 text-sm border-t pt-4">
+              <div className="flex justify-between"><span>Subtotal</span><span>₹{viewing.subtotal?.toFixed(0)}</span></div>
+              {viewing.discount > 0 && (
+                <div className="flex justify-between text-green-700">
+                  <span>Coupon {viewing.coupon_code ? `(${viewing.coupon_code})` : ""}</span>
+                  <span>-₹{viewing.discount.toFixed(0)}</span>
+                </div>
+              )}
+              {viewing.gift_wrap && (
+                <div className="flex justify-between"><span>Gift wrap</span><span>₹{viewing.gift_wrap_fee?.toFixed(0)}</span></div>
+              )}
+              <div className="flex justify-between"><span>Delivery</span><span>{viewing.delivery_fee === 0 ? "Free" : `₹${viewing.delivery_fee?.toFixed(0)}`}</span></div>
+              <div className="flex justify-between font-heading text-2xl pt-3 border-t mt-2"><span>Total</span><span>₹{viewing.total.toFixed(0)}</span></div>
+              <div className="flex justify-between mt-3 pt-3 border-t text-ink-muted">
+                <span>Payment</span>
+                <span className="uppercase text-xs tracking-widest">{viewing.payment_method} · {viewing.payment_status}</span>
+              </div>
+            </div>
+
+            <div className="mt-6 text-right">
+              <button onClick={()=>setViewing(null)} className="btn-outline">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -283,25 +421,51 @@ function CouponsAdmin() {
   const load = () => api.get("/admin/coupons").then((r) => setList(r.data));
   useEffect(() => { load(); }, []);
   const create = async () => {
+    if (!nu.code.trim()) return toast.error("Enter a code");
     await api.post("/admin/coupons", { ...nu, discount_percent: Number(nu.discount_percent) });
-    toast.success("Created"); setNu({ code: "", discount_percent: 10, active: true }); load();
+    toast.success("Coupon created"); setNu({ code: "", discount_percent: 10, active: true }); load();
   };
-  const del = async (id) => { await api.delete(`/admin/coupons/${id}`); load(); };
+  const del = async (id) => {
+    if (!window.confirm("Delete this coupon?")) return;
+    await api.delete(`/admin/coupons/${id}`); load();
+  };
+  const toggle = async (id) => {
+    const { data } = await api.put(`/admin/coupons/${id}/toggle`);
+    toast.success(data.active ? "Activated" : "Deactivated");
+    load();
+  };
   return (
     <div>
       <h1 className="font-heading text-4xl mb-8">Coupons</h1>
-      <div className="border p-6 mb-6 grid grid-cols-4 gap-3">
-        <input placeholder="Code" value={nu.code} onChange={(e)=>setNu({...nu, code:e.target.value.toUpperCase()})} data-testid="cp-code" className="border p-2"/>
-        <input type="number" placeholder="% off" value={nu.discount_percent} onChange={(e)=>setNu({...nu, discount_percent:e.target.value})} className="border p-2"/>
-        <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={nu.active} onChange={(e)=>setNu({...nu, active:e.target.checked})}/> Active</label>
-        <button onClick={create} data-testid="cp-create" className="btn-primary">Create</button>
+      <div className="border p-6 mb-6">
+        <div className="overline mb-3">Create new coupon</div>
+        <div className="grid grid-cols-4 gap-3 items-center">
+          <input placeholder="Code e.g. SUMMER20" value={nu.code} onChange={(e)=>setNu({...nu, code:e.target.value.toUpperCase()})} data-testid="cp-code" className="border p-2"/>
+          <input type="number" placeholder="% off" value={nu.discount_percent} onChange={(e)=>setNu({...nu, discount_percent:e.target.value})} className="border p-2"/>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={nu.active} onChange={(e)=>setNu({...nu, active:e.target.checked})}/> Active on create</label>
+          <button onClick={create} data-testid="cp-create" className="btn-primary">Create</button>
+        </div>
       </div>
       <table className="w-full text-sm">
-        <thead className="border-b"><tr className="text-left"><th className="py-3">Code</th><th>Discount</th><th>Active</th><th></th></tr></thead>
+        <thead className="border-b"><tr className="text-left"><th className="py-3">Code</th><th>Discount</th><th>Status</th><th></th></tr></thead>
         <tbody>
+          {list.length === 0 && <tr><td colSpan={4} className="py-8 text-center text-ink-muted">No coupons yet.</td></tr>}
           {list.map(c => (
-            <tr key={c.id} className="border-b"><td className="py-3 font-medium">{c.code}</td><td>{c.discount_percent}%</td><td>{c.active ? "Yes" : "No"}</td>
-              <td className="text-right"><button onClick={()=>del(c.id)} className="text-red-700">Delete</button></td></tr>
+            <tr key={c.id} className="border-b" data-testid={`crow-${c.code}`}>
+              <td className="py-3 font-medium">{c.code}</td>
+              <td>{c.discount_percent}%</td>
+              <td>
+                <span className={`inline-block px-2 py-1 text-xs uppercase tracking-widest ${c.active ? "bg-green-100 text-green-800" : "bg-gray-200 text-gray-600"}`}>
+                  {c.active ? "Active" : "Inactive"}
+                </span>
+              </td>
+              <td className="text-right whitespace-nowrap">
+                <button onClick={()=>toggle(c.id)} data-testid={`cp-toggle-${c.code}`} className="link-gold mr-4">
+                  {c.active ? "Deactivate" : "Activate"}
+                </button>
+                <button onClick={()=>del(c.id)} data-testid={`cp-del-${c.code}`} className="text-red-700">Delete</button>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>

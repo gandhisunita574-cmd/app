@@ -22,7 +22,11 @@ export default function Checkout() {
       const { data } = await api.get(`/coupons/${coupon}`);
       setCouponDiscount(subtotal * data.discount_percent / 100);
       toast.success(`${data.discount_percent}% off applied`);
-    } catch { toast.error("Invalid coupon"); }
+    } catch (err) {
+      const msg = err?.response?.data?.detail || "Invalid coupon code";
+      setCouponDiscount(0);
+      toast.error(typeof msg === "string" ? msg : "Invalid coupon");
+    }
   };
 
   const delivery = subtotal >= 999 ? 0 : 49;
