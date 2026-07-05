@@ -31,7 +31,12 @@ export default function Account() {
           <div className="overline">Account</div>
           <h1 className="font-heading text-5xl mt-2">Hello, {user?.name}</h1>
         </div>
-        <button onClick={logout} data-testid="acc-logout" className="btn-outline">Sign out</button>
+        <div className="flex gap-3">
+          {user?.role === "admin" && (
+            <a href="/admin" data-testid="acc-admin-link" className="btn-gold">Open Admin Dashboard</a>
+          )}
+          <button onClick={logout} data-testid="acc-logout" className="btn-outline">Sign out</button>
+        </div>
       </div>
 
       <Tabs defaultValue={tab}>

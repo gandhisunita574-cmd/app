@@ -53,6 +53,11 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-5">
+          {user && user !== false && user.role === "admin" && (
+            <Link to="/admin" data-testid="admin-link" className="hidden sm:inline text-xs uppercase tracking-widest text-[#D4AF37] hover:text-[#B59530]">
+              Admin
+            </Link>
+          )}
           <button onClick={() => nav("/shop")} data-testid="search-btn" aria-label="Search">
             <Search className="w-5 h-5" />
           </button>
@@ -96,6 +101,11 @@ export default function Header() {
                 {l.label}
               </Link>
             ))}
+            {user && user !== false && user.role === "admin" && (
+              <Link to="/admin" onClick={() => setMobile(false)} className="text-xl font-heading text-[#D4AF37]" data-testid="mnav-admin">
+                Admin Dashboard
+              </Link>
+            )}
             {user && user !== false ? (
               <button onClick={() => { logout(); setMobile(false); }} className="text-left text-sm text-ink-muted" data-testid="mobile-logout">Sign out</button>
             ) : (
