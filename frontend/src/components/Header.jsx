@@ -89,30 +89,33 @@ export default function Header() {
 
       {/* Mobile drawer */}
       {mobile && (
-        <div className="fixed inset-0 z-50 bg-white lg:hidden animate-fade-in">
-          <div className="flex items-center justify-between p-6 border-b">
-            <span className="font-heading text-2xl">Menu</span>
-            <button onClick={() => setMobile(false)} data-testid="menu-close-btn"><X /></button>
+        <>
+          <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={() => setMobile(false)} />
+          <div className="fixed inset-y-0 left-0 z-50 w-[85%] max-w-sm bg-white shadow-2xl lg:hidden animate-slide-in-left">
+            <div className="flex items-center justify-between p-6 border-b">
+              <span className="font-heading text-2xl">Menu</span>
+              <button onClick={() => setMobile(false)} data-testid="menu-close-btn"><X /></button>
+            </div>
+            <div className="flex flex-col p-8 gap-6 bg-white">
+              {links.map((l) => (
+                <Link key={l.label} to={l.to} onClick={() => setMobile(false)}
+                  className="text-xl font-heading" data-testid={`mnav-${l.label.toLowerCase()}`}>
+                  {l.label}
+                </Link>
+              ))}
+              {user && user !== false && user.role === "admin" && (
+                <Link to="/admin" onClick={() => setMobile(false)} className="text-xl font-heading text-[#D4AF37]" data-testid="mnav-admin">
+                  Admin Dashboard
+                </Link>
+              )}
+              {user && user !== false ? (
+                <button onClick={() => { logout(); setMobile(false); }} className="text-left text-sm text-ink-muted" data-testid="mobile-logout">Sign out</button>
+              ) : (
+                <Link to="/login" className="text-sm" onClick={() => setMobile(false)}>Sign in</Link>
+              )}
+            </div>
           </div>
-          <div className="flex flex-col p-8 gap-6">
-            {links.map((l) => (
-              <Link key={l.label} to={l.to} onClick={() => setMobile(false)}
-                className="text-xl font-heading" data-testid={`mnav-${l.label.toLowerCase()}`}>
-                {l.label}
-              </Link>
-            ))}
-            {user && user !== false && user.role === "admin" && (
-              <Link to="/admin" onClick={() => setMobile(false)} className="text-xl font-heading text-[#D4AF37]" data-testid="mnav-admin">
-                Admin Dashboard
-              </Link>
-            )}
-            {user && user !== false ? (
-              <button onClick={() => { logout(); setMobile(false); }} className="text-left text-sm text-ink-muted" data-testid="mobile-logout">Sign out</button>
-            ) : (
-              <Link to="/login" className="text-sm" onClick={() => setMobile(false)}>Sign in</Link>
-            )}
-          </div>
-        </div>
+        </>
       )}
     </header>
   );
