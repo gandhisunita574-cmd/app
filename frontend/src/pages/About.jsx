@@ -6,7 +6,7 @@ export default function About() {
           <div className="overline">Our Story</div>
           <h1 className="font-heading text-5xl md:text-6xl mt-4">Crafted with intention.<br/>Delivered with love.</h1>
           <p className="mt-8 text-ink-muted leading-relaxed max-w-md">
-            HamperStore began in a small studio with a single idea — that a gift should feel as considered as the moment it celebrates. Today, we hand-assemble every hamper and hand-arrange every bouquet, so nothing that leaves us is ever ordinary.
+            Treasure Hampers began in a small studio with a single idea — that a gift should feel as considered as the moment it celebrates. Today, we hand-assemble every hamper and hand-arrange every bouquet, so nothing that leaves us is ever ordinary.
           </p>
         </div>
         <div>
@@ -19,7 +19,7 @@ export default function About() {
           {[
             { t: "Our Mission", d: "To turn small moments into unforgettable ones through thoughtful, handcrafted gifting." },
             { t: "Quality Commitment", d: "Each hamper is inspected by a curator before it ships. If we won't gift it, we won't sell it." },
-            { t: "Customer-First", d: "From bespoke requests to same-day surprises, our team is here to make your gift perfect." },
+            { t: "Customer-First", d: "From bespoke requests to last-minute surprises, our team is here to make your gift perfect." },
           ].map((b) => (
             <div key={b.t}>
               <div className="text-[#D4AF37] text-4xl font-heading">✦</div>

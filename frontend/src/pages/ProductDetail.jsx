@@ -132,9 +132,13 @@ export default function ProductDetail() {
           </div>
 
           <div className="mt-8 grid grid-cols-3 gap-4 text-xs text-ink-muted">
-            <div className="flex flex-col items-center text-center gap-2"><Truck className="w-5 h-5"/>Same-day delivery</div>
+            <div className="flex flex-col items-center text-center gap-2"><Truck className="w-5 h-5"/>Fastest delivery</div>
             <div className="flex flex-col items-center text-center gap-2"><Shield className="w-5 h-5"/>Secure checkout</div>
-            <div className="flex flex-col items-center text-center gap-2"><RotateCcw className="w-5 h-5"/>Easy returns</div>
+            <div className="flex flex-col items-center text-center gap-2"><RotateCcw className="w-5 h-5"/>Returns on damage only</div>
+          </div>
+
+          <div className="mt-6 border-l-2 border-[#D4AF37] pl-4 text-xs text-ink-muted leading-relaxed">
+            <span className="font-medium text-black">Note:</span> As our hampers and bouquets are hand-crafted and perishable, returns are accepted <span className="font-medium text-black">only for damaged products</span>. Please share a photo within 24 hours of delivery — we'll arrange a replacement or refund.
           </div>
         </div>
       </div>

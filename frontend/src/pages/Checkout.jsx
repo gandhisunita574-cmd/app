@@ -127,6 +127,9 @@ export default function Checkout() {
           <button type="submit" disabled={placing} data-testid="ck-place-order" className="btn-primary w-full mt-6">
             {placing ? "Placing…" : "Place Order"}
           </button>
+          <div className="mt-4 text-[11px] text-ink-muted leading-relaxed">
+            By placing this order you agree to our returns policy: <span className="text-black">returns accepted only for damaged products</span>, reported with a photo within 24 hours of delivery.
+          </div>
         </aside>
       </form>
     </div>

@@ -33,8 +33,8 @@ export default function Header() {
         </button>
 
         <Link to="/" className="flex items-center gap-2" data-testid="brand-logo">
-          <span className="font-heading text-3xl tracking-tight">Hamper</span>
-          <span className="font-heading text-3xl italic text-[#D4AF37]">Store</span>
+          <span className="font-heading text-3xl tracking-tight">Treasure</span>
+          <span className="font-heading text-3xl italic text-[#D4AF37]">Hampers</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">

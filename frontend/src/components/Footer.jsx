@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="bg-black text-white mt-24">
       <div className="container-x py-20 grid md:grid-cols-4 gap-12">
         <div>
-          <div className="font-heading text-3xl">Hamper<span className="italic text-[#D4AF37]">Store</span></div>
+          <div className="font-heading text-3xl">Treasure<span className="italic text-[#D4AF37]">Hampers</span></div>
           <p className="mt-6 text-white/60 text-sm leading-relaxed">
             Curated luxury gifts, hand-arranged bouquets, and bespoke hampers delivered with intention.
           </p>
@@ -67,7 +67,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 py-6 text-center text-xs text-white/40">
-        © {new Date().getFullYear()} HamperStore · Handcrafted with care
+        © {new Date().getFullYear()} Treasure Hampers · Handcrafted with care
       </div>
     </footer>
   );

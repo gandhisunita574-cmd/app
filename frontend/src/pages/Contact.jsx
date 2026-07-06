@@ -24,7 +24,7 @@ export default function Contact() {
         <div className="space-y-8">
           <Info icon={Phone} label="Call" v="+91 99999 99999" testid="contact-info-phone"/>
           <Info icon={MessageCircle} label="WhatsApp" v="Chat with us" testid="contact-info-wa"/>
-          <Info icon={Mail} label="Email" v="hello@hamperstore.com" testid="contact-info-email"/>
+          <Info icon={Mail} label="Email" v="hello@treasurehampers.com" testid="contact-info-email"/>
           <Info icon={MapPin} label="Studio" v="42 Curator's Lane, Mumbai 400001"/>
           <a href="https://wa.me/919999999999" data-testid="wa-fab" className="btn-gold inline-block">
             <MessageCircle className="w-4 h-4 inline mr-2"/> WhatsApp us

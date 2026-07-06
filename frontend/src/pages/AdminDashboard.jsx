@@ -10,7 +10,7 @@ export default function AdminDashboard() {
   return (
     <div className="flex min-h-screen bg-white" data-testid="admin-page">
       <aside className="w-64 bg-black text-white p-6 flex flex-col">
-        <Link to="/" className="font-heading text-2xl mb-10">Hamper<span className="italic text-[#D4AF37]">Store</span></Link>
+        <Link to="/" className="font-heading text-2xl mb-10">Treasure<span className="italic text-[#D4AF37]">Hampers</span></Link>
         <nav className="space-y-1 flex-1">
           <A to="/admin" icon={LayoutDashboard} label="Dashboard" end />
           <A to="/admin/products" icon={Package} label="Products" />

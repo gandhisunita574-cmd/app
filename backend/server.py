@@ -661,4 +661,4 @@ async def on_shutdown():
 
 @api.get("/")
 async def root():
-    return {"message": "HamperStore API"}
+    return {"message": "Treasure Hampers API"}

@@ -54,7 +54,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex items-center gap-8 mt-16 text-xs uppercase tracking-widest text-ink-muted">
-              <div>Same day delivery</div>
+              <div>Fastest delivery, promised</div>
               <div className="w-px h-4 bg-black/20" />
               <div>100% Hand-crafted</div>
             </div>
@@ -80,7 +80,7 @@ export default function Home() {
           {[
             { icon: Sparkles, t: "Hand-crafted", d: "Every hamper is assembled by hand." },
             { icon: ShieldCheck, t: "Premium quality", d: "Only the finest curated ingredients." },
-            { icon: Truck, t: "Same-day delivery", d: "In 40+ cities across India." },
+            { icon: Truck, t: "Fastest delivery", d: "Thoughtfully packed and rushed to your door." },
             { icon: Gift, t: "Custom gifting", d: "Design a hamper to match your vision." },
           ].map((f, i) => (
             <div key={i} className="text-center">
@@ -204,7 +204,7 @@ export default function Home() {
 
       {/* INSTAGRAM */}
       <section className="container-x py-16">
-        <div className="text-center mb-10"><div className="overline">@HamperStore</div><h2 className="font-heading text-3xl md:text-4xl mt-2">Follow the moments</h2></div>
+        <div className="text-center mb-10"><div className="overline">@TreasureHampers</div><h2 className="font-heading text-3xl md:text-4xl mt-2">Follow the moments</h2></div>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
           {[
             "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=400&q=80",
